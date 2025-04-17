@@ -8,7 +8,7 @@ from tensorflow.keras.layers import Conv2DTranspose
 from tensorflow.keras.layers import concatenate
 from tensorflow.keras.layers import ZeroPadding2D
 from tensorflow.keras.layers import Dense
-
+import tensorflow
 
 # Compare the two inputs
 def comparator(learner, instructor):
@@ -28,7 +28,11 @@ def summary(model):
                   metrics=['accuracy'])
     result = []
     for layer in model.layers:
-        descriptors = [layer.__class__.__name__, layer.output_shape, layer.count_params()]
+        # if (type(layer) == tensorflow.keras.layers.InputLayer):
+        #     descriptors = [layer.__class__.__name__, layer.output.shape, layer.count_params()]
+        # else:  
+        #     descriptors = [layer.__class__.__name__, layer.output_shape, layer.count_params()]
+        descriptors = [layer.__class__.__name__, layer.output.shape, layer.count_params()]
         if (type(layer) == Conv2D):
             descriptors.append(layer.padding)
             descriptors.append(layer.activation.__name__)
