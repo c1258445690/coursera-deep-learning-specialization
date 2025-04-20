@@ -30,11 +30,17 @@ def generate_colors(class_names):
     return colors
 
 def scale_boxes(boxes, image_shape):
-    """ Scales the predicted boxes in order to be drawable on the image"""
+    """ 
+    Scales the predicted boxes in order to be drawable on the image
+    将锚框的左上右下y,x坐标缩放回适合图片的尺寸
+    boxes: (None,4),None表示满足条件的锚框数
+    """
     height = image_shape[0]
     width = image_shape[1]
     image_dims = K.stack([height, width, height, width])
     image_dims = K.reshape(image_dims, [1, 4])
+    # image_dims是(1,4),image_dims=[[height, width, height, width]]
+    # 
     boxes = boxes * image_dims
     return boxes
 

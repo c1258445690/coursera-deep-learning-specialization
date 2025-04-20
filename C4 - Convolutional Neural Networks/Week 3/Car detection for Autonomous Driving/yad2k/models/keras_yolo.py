@@ -136,10 +136,14 @@ def yolo_head(feats, anchors, num_classes):
 
 
 def yolo_boxes_to_corners(box_xy, box_wh):
-    """Convert YOLO box predictions to bounding box corners."""
+    """
+    Convert YOLO box predictions to bounding box corners.
+    返回值：维度是(19,19,5,4)，最后1个维度的4个值是格子左上角的y,x,右上角的y,x
+    """
+    # box_xy和box_wh都是(19,19,5,2),box_mins和box_maxes也是(19,19,5,2)，分别是格子左上角的y,x坐标和右下角的y,x坐标
     box_mins = box_xy - (box_wh / 2.)
     box_maxes = box_xy + (box_wh / 2.)
-
+    #  box_mins[..., 1:2]，box_mins[..., 0:1]，box_maxes[..., 1:2]，box_maxes[..., 0:1]都是(19,19,5,1)，K.concatenate默认的axis=-1,拼接最后1个维度(19,19,5,4)
     return K.concatenate([
         box_mins[..., 1:2],  # y_min
         box_mins[..., 0:1],  # x_min
